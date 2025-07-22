@@ -90,7 +90,7 @@ def load_passwords_from_yaml(
     if not secret_key:
         return {}
 
-    from conf.loaders.encryption.encryptor import load_passwords
+    from ..encryption.encryptor import load_passwords
 
     try:
         # print(f"Reading passwords file: {passwords_file}")
@@ -122,7 +122,7 @@ def _decrypt_vars(
     if not secret_key:
         return
 
-    from conf.loaders.encryption.encryptor import decrypt_password
+    from ..encryption.encryptor import decrypt_password
     res = {}
     for k, v in dct.items():
         try:
@@ -138,7 +138,7 @@ def load_vars_from_env(
     object_to_update: MutableMapping[str, Any],
     secret_key_file: Optional[PathLike] = None,
     password_sep: str = '$',
-    prefix: str = 'DREAMOCR_'
+    prefix: str = 'TRANSLATE_'
 ):
     """
     updates object according to env variables rules with encrypted data allowed
