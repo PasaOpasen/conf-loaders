@@ -1,0 +1,6 @@
+
+cryptography
+filelock
+PyYAML
+typing_extensions
+varsubst
