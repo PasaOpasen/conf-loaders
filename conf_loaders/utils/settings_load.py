@@ -27,35 +27,29 @@ def load_settings_from_yaml(
         show_update_errors: whether to verbose updating errors
 
     """
-    try:
-        text = read_text(path)
-        try:
-            from varsubst import varsubst
-            text = varsubst(text)
-        except ImportError:
-            pass
+    from varsubst import varsubst
 
-        new_vars = read_yaml(io.StringIO(text))
-        if new_vars:
-            if base_dir:
-                new_vars = {
-                    k: (
-                        str(Path(base_dir, v).resolve().absolute())
-                        if isinstance(v, str) and is_like_relative_path(v)
-                        else v
-                    )
-                    for k, v in new_vars.items()
-                }
+    text = read_text(path)
+    text = varsubst(text)
 
-            # much extended version of object_to_update.update(_new_vars)
-            from .settings_update import update_data
-            update_data(
-                commands=new_vars, data=object_to_update,
-                show_values_on_error=show_update_errors,
-            )
+    new_vars = read_yaml(io.StringIO(text))
+    if new_vars:
+        if base_dir:
+            new_vars = {
+                k: (
+                    str(Path(base_dir, v).resolve().absolute())
+                    if isinstance(v, str) and is_like_relative_path(v)
+                    else v
+                )
+                for k, v in new_vars.items()
+            }
 
-    except Exception as e:
-        print(f"Can't load yaml settings ({str(path)})", e)
+        # much extended version of object_to_update.update(_new_vars)
+        from .settings_update import update_data
+        update_data(
+            commands=new_vars, data=object_to_update,
+            show_values_on_error=show_update_errors,
+        )
 
 
 def load_passwords_from_yaml(
